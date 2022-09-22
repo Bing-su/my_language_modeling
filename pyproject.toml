@@ -1,0 +1,15 @@
+[project]
+name = "mlm_modeling"
+description = "Masked Language Modeling with Transformers"
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Dowon", email = "ks2515@naver.com"}
+]
+
+[project.urls]
+repository = ""
+
+[tool.isort]
+profile = "black"

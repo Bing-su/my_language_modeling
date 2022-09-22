@@ -1,0 +1,33 @@
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+
+  - pytorch>=1.12
+  - transformers
+  - datasets>=2.0.0
+
+  - scikit-learn
+  - pandas
+  - wandb
+
+  - rich
+  - typer
+  - shellingham
+  - loguru
+
+  - black
+  - isort
+  - flake8
+  - flake8-bugbear
+  - mypy
+  - ipywidgets
+  - pre-commit
+
+  - pip:
+      - accelerate
+      - bitsandbytes
+      - evaluate
