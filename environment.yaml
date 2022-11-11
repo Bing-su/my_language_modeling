@@ -1,14 +1,17 @@
 channels:
   - pytorch
+  - nvidia
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9
+  - python=3.10
   - pip
 
   - pytorch>=1.12
-  - transformers
-  - datasets>=2.0.0
+  - pytorch-cuda=11.7
+  - transformers>=4.24.0
+  - datasets>=2.6.0
+  - pytorch-lightning
 
   - scikit-learn
   - pandas
@@ -16,7 +19,6 @@ dependencies:
 
   - rich
   - typer
-  - shellingham
   - loguru
 
   - black
@@ -28,6 +30,4 @@ dependencies:
   - pre-commit
 
   - pip:
-      - accelerate
-      - bitsandbytes
-      - evaluate
+      - bitsandbytes; platform_system=='Linux'
