@@ -31,3 +31,4 @@ dependencies:
 
   - pip:
       - bitsandbytes; platform_system=='Linux'
+      - pytorch_optimizer
