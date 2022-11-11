@@ -87,4 +87,4 @@ class TextMLMModule(pl.LightningModule):
 
     def save(self, save_path: str):
         self.model.save_pretrained(save_path)
-        self.processor.save_pretrained(save_path)
+        self.tokenizer.save_pretrained(save_path)
