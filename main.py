@@ -97,7 +97,8 @@ def train(
 
     if not wandb_name:
         now = datetime.strftime(datetime.now(), "%Y%m%d_%H%M%S")
-        wandb_name = f"{model_name}_{now}"
+        name = model_name.split("/")[-1]
+        wandb_name = f"{name}_{now}"
     logger.info(f"wandb name: {wandb_name}")
 
     logger.debug("set trainer")
