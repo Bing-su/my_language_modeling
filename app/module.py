@@ -26,7 +26,7 @@ class TextMLMModule(pl.LightningModule):
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
 
-        self.accuracy = Accuracy(ignore_index=-100)
+        self.accuracy = Accuracy(num_classes=tokenizer.vocab_size, ignore_index=-100)
 
     @property
     def forward(self):
@@ -36,8 +36,7 @@ class TextMLMModule(pl.LightningModule):
         output = self.model(**batch)
         loss = output.loss
 
-        logits = output.logits
-        preds = torch.argmax(logits, dim=-1)
+        preds = torch.argmax(output.logits, dim=-1)
         labels = batch["labels"]
         self.accuracy(preds, labels)
 

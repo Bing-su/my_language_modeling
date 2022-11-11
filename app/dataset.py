@@ -15,14 +15,10 @@ class TextDataset(Dataset):
     def __len__(self):
         return len(self.dataset)
 
-    def __getitem__(self, idx: int):
+    def __getitem__(self, idx):
         item = self.dataset[idx]
         text = item["text"]
-        inputs = self.tokenizer(
-            text, truncation=True, return_tensors="pt", return_special_tokens_mask=True
-        )
-        for k, v in inputs.items():
-            inputs[k] = v.squeeze(0)
+        inputs = self.tokenizer(text, truncation=True, return_special_tokens_mask=True)
         return inputs
 
 
