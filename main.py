@@ -25,7 +25,7 @@ def train(
     ),
     optimizer: str = Option("adamw", help="optimizer name", rich_help_panel="model"),
     learning_rate: float = Option(5e-4, help="learning rate", rich_help_panel="model"),
-    weigth_decay: float = Option(1e-4, help="weight decay", rich_help_panel="model"),
+    weight_decay: float = Option(1e-4, help="weight decay", rich_help_panel="model"),
     batch_size: int = Option(32, min=1, help="batch size", rich_help_panel="data"),
     num_workers: int = Option(
         0, min=0, help="num workers for dataloader", rich_help_panel="train"
@@ -77,7 +77,7 @@ def train(
         tokenizer=tokenizer,
         optimizer=optimizer,
         learning_rate=learning_rate,
-        weight_decay=weigth_decay,
+        weight_decay=weight_decay,
     )
 
     checkpoints = ModelCheckpoint(

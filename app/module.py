@@ -26,7 +26,9 @@ class TextMLMModule(pl.LightningModule):
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
 
-        self.accuracy = Accuracy(num_classes=tokenizer.vocab_size, ignore_index=-100)
+        self.accuracy = Accuracy(
+            task="multiclass", num_classes=tokenizer.vocab_size, ignore_index=-100
+        )
 
     @property
     def forward(self):

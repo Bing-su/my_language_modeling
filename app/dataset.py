@@ -33,7 +33,7 @@ class TextDataModule(pl.LightningDataModule):
         self.tokenizer = tokenizer
         self.batch_size = batch_size
         self.num_workers = num_workers
-        self.collator = DataCollatorForLanguageModeling(tokenizer)
+        self.collator = DataCollatorForLanguageModeling(tokenizer, mlm_probability=0.4)
 
     def prepare_data(self) -> None:
         load_dataset(
