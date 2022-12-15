@@ -1,3 +1,5 @@
+import inspect
+
 import pytorch_lightning as pl
 import torch
 from loguru import logger
@@ -62,9 +64,18 @@ class TextMLMModule(pl.LightningModule):
         ]
 
         opt_class = create_optimizer(self.optimizer)
+        signiture = inspect.signature(opt_class)
+        if "capturable" in signiture.parameters:
+            opt_kwargs["capturable"] = True
+        if "weight_decouple" in signiture.parameters:
+            opt_kwargs["weight_decouple"] = True
+        if "decouple_decay" in signiture.parameters:
+            opt_kwargs["decouple_decay"] = True
+
         optimizer = opt_class(
             optimizer_grouped_parameters,
-            lr=5e-5,
+            lr=self.learning_rate,
+            **opt_kwargs,
         )
 
         if "bnb" in self.optimizer:
