@@ -37,14 +37,14 @@ class TextDataModule(pl.LightningDataModule):
 
     def prepare_data(self) -> None:
         load_dataset(
-            "Bingsu/my-korean-training-corpus-half",
+            "Bingsu/my-korean-training-corpus",
             split="train",
             use_auth_token=True,
         )
 
     def setup(self, stage: Optional[str] = None) -> None:
         dataset = load_dataset(
-            "Bingsu/my-korean-training-corpus-half", split="train", use_auth_token=True
+            "Bingsu/my-korean-training-corpus", split="train", use_auth_token=True
         )
         self.train_dataset = TextDataset(dataset, self.tokenizer)
 
