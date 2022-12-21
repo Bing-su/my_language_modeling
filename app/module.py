@@ -65,6 +65,7 @@ class TextMLMModule(pl.LightningModule):
 
         opt_class = create_optimizer(self.optimizer)
         signiture = inspect.signature(opt_class)
+        opt_kwargs = {}
         if "capturable" in signiture.parameters:
             opt_kwargs["capturable"] = True
         if "weight_decouple" in signiture.parameters:
