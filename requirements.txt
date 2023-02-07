@@ -7,12 +7,12 @@ wandb
 rich
 typer
 loguru
+bitsandbytes; platform_system=='Linux'
+pytorch_optimizer
+
 black
 isort
-flake8
-flake8-bugbear
+ruff
 mypy
 ipywidgets
 pre-commit
-bitsandbytes
-pytorch_optimizer

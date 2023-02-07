@@ -7,11 +7,11 @@ dependencies:
   - python=3.10
   - pip
 
-  - pytorch>=1.12
+  - pytorch>=1.13.1
   - pytorch-cuda=11.7
-  - transformers>=4.24.0
-  - datasets>=2.6.0
-  - pytorch-lightning
+  - transformers>=4.26.0
+  - datasets>=2.9.0
+  - pytorch-lightning>=1.9.0
 
   - scikit-learn
   - pandas
@@ -32,3 +32,4 @@ dependencies:
   - pip:
       - bitsandbytes; platform_system=='Linux'
       - pytorch_optimizer
+      - ruff

@@ -1,6 +1,6 @@
 [project]
-name = "mlm_modeling"
-description = "Masked Language Modeling with Transformers"
+name = "my_language_modeling"
+description = "Masked Language Modeling, Causal Language Modeling with Transformers"
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -9,7 +9,12 @@ authors = [
 ]
 
 [project.urls]
-repository = ""
+repository = "https://github.com/Bing-su/my_language_modeling"
 
 [tool.isort]
 profile = "black"
+
+[tool.ruff]
+select = ["A", "B", "C4", "E", "F", "I001", "N", "PT", "UP", "W"]
+ignore = ["B008", "B905", "E501", "UP007"]
+unfixable = ["F401"]
