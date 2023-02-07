@@ -1,3 +1,3 @@
-# mlm_modeling
+# my_language_modeling
 
-Masked Language Modeling with Transformers
+Masked Language Modeling, Causal Language Modeling with Transformers
