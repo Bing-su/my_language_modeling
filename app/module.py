@@ -1,21 +1,24 @@
 import inspect
+from typing import TYPE_CHECKING
 
 import pytorch_lightning as pl
 import torch
 from loguru import logger
-from transformers import PreTrainedTokenizerFast
 from torchmetrics import Accuracy
 
 from .util import create_optimizer
+
+if TYPE_CHECKING:
+    from transformers import PreTrainedModel, PreTrainedTokenizerFast
 
 
 class TextMLMModule(pl.LightningModule):
     def __init__(
         self,
-        model: torch.nn.Module,
-        tokenizer: PreTrainedTokenizerFast,
+        model: "PreTrainedModel",
+        tokenizer: "PreTrainedTokenizerFast",
         optimizer: str = "adamw",
-        learning_rate: float = 5e-4,
+        learning_rate: float = 1e-4,
         weight_decay: float = 1e-4,
     ):
         super().__init__()
@@ -29,7 +32,7 @@ class TextMLMModule(pl.LightningModule):
         self.weight_decay = weight_decay
 
         self.accuracy = Accuracy(
-            task="multiclass", num_classes=tokenizer.vocab_size, ignore_index=-100
+            task="multiclass", num_classes=model.config.vocab_size, ignore_index=-100
         )
 
     @property
@@ -44,8 +47,8 @@ class TextMLMModule(pl.LightningModule):
         labels = batch["labels"]
         self.accuracy(preds, labels)
 
-        self.log("train/loss", loss, on_step=True, on_epoch=True)
-        self.log("train/accuracy", self.accuracy, on_step=True, on_epoch=True)
+        self.log("train_loss", loss, on_step=True, on_epoch=True)
+        self.log("train_acc", self.accuracy, on_step=True, on_epoch=True)
         return loss
 
     def configure_optimizers(self):
@@ -72,6 +75,8 @@ class TextMLMModule(pl.LightningModule):
             opt_kwargs["weight_decouple"] = True
         if "decouple_decay" in signiture.parameters:
             opt_kwargs["decouple_decay"] = True
+        if "decoupled_weight_decay" in signiture.parameters:
+            opt_kwargs["decoupled_weight_decay"] = True
 
         optimizer = opt_class(
             optimizer_grouped_parameters,

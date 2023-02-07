@@ -81,11 +81,11 @@ def train(
     )
 
     checkpoints = ModelCheckpoint(
-        monitor="train/loss_epoch",
+        monitor="train_loss_epoch",
         save_last=True,
     )
 
-    callbacks = [checkpoints, RichProgressBar(), LearningRateMonitor("step")]
+    callbacks = [checkpoints, RichProgressBar(), LearningRateMonitor()]
 
     if seed is not None:
         pl.seed_everything(seed)
