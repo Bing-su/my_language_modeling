@@ -41,6 +41,12 @@ def train(
     model_name: str = Argument(
         ..., help="huggingface model name", show_default=False, rich_help_panel="model"
     ),
+    tokenizer_name: Optional[str] = Option(
+        None,
+        help="huggingface tokenizer name. if None, use 'model_name'",
+        show_default=False,
+        rich_help_panel="model",
+    ),
     model_type: str = Option(
         "mlm", help="model type, ['mlm', 'clm']", rich_help_panel="model"
     ),
@@ -101,7 +107,11 @@ def train(
         model = AutoModelForMaskedLM.from_pretrained(model_name)
     else:
         model = AutoModelForCausalLM.from_pretrained(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    if tokenizer_name:
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     logger.debug("loading datamodule")
     datamodule = TextDataModule(

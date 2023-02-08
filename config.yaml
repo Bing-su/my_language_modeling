@@ -1,4 +1,5 @@
 model_name:
+tokenizer_name:
 model_type: mlm
 optimizer: adamw
 learning_rate: !!float 1e-4
