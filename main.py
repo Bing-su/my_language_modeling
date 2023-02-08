@@ -134,6 +134,7 @@ def train(
     )
 
     checkpoints = ModelCheckpoint(
+        dirpath="pl_checkpoints",
         monitor="train_loss_epoch",
         save_last=True,
     )
