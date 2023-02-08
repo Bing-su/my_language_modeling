@@ -15,7 +15,7 @@ max_epochs: 3
 steps_per_epoch:
 wandb_name:
 seed:
-fast_dev_run: false
+fast_dev_run: 0
 save_path: "save/my_model"
 log_every_n_steps: 100
 resume_from_checkpoint:

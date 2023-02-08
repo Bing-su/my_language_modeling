@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Union
 
 import pytorch_lightning as pl
 import typer
@@ -81,7 +81,7 @@ def train(
     steps_per_epoch: Optional[int] = Option(
         None, min=1, help="steps per epoch", rich_help_panel="train"
     ),
-    fast_dev_run: bool = Option(False, help="do test run", rich_help_panel="train"),
+    fast_dev_run: int = Option(0, help="do test run", rich_help_panel="train"),
     save_path: str = Option(
         "save/my_model", help="save path of trained model", rich_help_panel="train"
     ),

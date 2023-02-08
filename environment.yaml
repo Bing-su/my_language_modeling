@@ -20,6 +20,7 @@ dependencies:
   - rich
   - typer
   - loguru
+  - pyyaml
 
   - black
   - isort
