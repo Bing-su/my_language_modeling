@@ -11,7 +11,7 @@ from pytorch_lightning.callbacks import (
     RichProgressBar,
 )
 from pytorch_lightning.loggers import WandbLogger
-from transformers import AutoModelForMaskedLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoModelForMaskedLM, AutoTokenizer
 from typer import Argument, Option, Typer
 
 from app.dataset import TextDataModule
@@ -40,6 +40,9 @@ def config_callback(
 def train(
     model_name: str = Argument(
         ..., help="huggingface model name", show_default=False, rich_help_panel="model"
+    ),
+    model_type: str = Option(
+        "mlm", help="model type, ['mlm', 'clm']", rich_help_panel="model"
     ),
     config: Optional[str] = Option(
         None, help="config yaml file", callback=config_callback, is_eager=True
@@ -83,8 +86,15 @@ def train(
     ),
     seed: Optional[int] = Option(None, help="seed", rich_help_panel="train"),
 ):
+    model_type = model_type.lower()
+    if model_type not in ["mlm", "clm"]:
+        raise ValueError(f"model_type must be 'mlm' or 'clm', got {model_type}")
+
     logger.debug("loading transformers model, tokenizer")
-    model = AutoModelForMaskedLM.from_pretrained(model_name)
+    if model_type == "mlm":
+        model = AutoModelForMaskedLM.from_pretrained(model_name)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     logger.debug("loading datamodule")
@@ -96,6 +106,7 @@ def train(
     module = TextMLMModule(
         model=model,
         tokenizer=tokenizer,
+        model_type=model_type,
         optimizer=optimizer,
         learning_rate=learning_rate,
         weight_decay=weight_decay,

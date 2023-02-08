@@ -17,6 +17,7 @@ class TextMLMModule(pl.LightningModule):
         self,
         model: "PreTrainedModel",
         tokenizer: "PreTrainedTokenizerBase",
+        model_type: str = "mlm",
         optimizer: str = "adamw",
         learning_rate: float = 1e-4,
         weight_decay: float = 1e-4,
@@ -26,12 +27,13 @@ class TextMLMModule(pl.LightningModule):
 
         self.model = model
         self.tokenizer = tokenizer
+        self.model_type = model_type
 
         self.optimizer = optimizer
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
 
-        self.accuracy = Accuracy(
+        self.acc = Accuracy(
             task="multiclass", num_classes=model.config.vocab_size, ignore_index=-100
         )
 
@@ -43,12 +45,10 @@ class TextMLMModule(pl.LightningModule):
         output = self.model(**batch)
         loss = output.loss
 
-        preds = torch.argmax(output.logits, dim=-1)
-        labels = batch["labels"]
-        self.accuracy(preds, labels)
+        self.calc_accuracy(output.logits, batch["labels"])
 
         self.log("train_loss", loss, on_step=True, on_epoch=True)
-        self.log("train_acc", self.accuracy, on_step=True, on_epoch=True)
+        self.log("train_acc", self.acc, on_step=True, on_epoch=True)
         return loss
 
     def configure_optimizers(self):
@@ -110,3 +110,13 @@ class TextMLMModule(pl.LightningModule):
     def save(self, save_path: str):
         self.model.save_pretrained(save_path)
         self.tokenizer.save_pretrained(save_path)
+
+    def calc_accuracy(self, logits, labels):
+        preds = torch.argmax(logits, dim=-1)
+        # preds.shape == labels.shape == (batch_size, seq_len)
+        if self.model_type == "mlm":
+            self.acc(preds, labels)
+        else:  # "clm"
+            preds = preds[:, 1:]
+            labels = labels[:, :-1]
+            self.acc(preds, labels)
