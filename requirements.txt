@@ -1,6 +1,6 @@
-transformers
-datasets
-pytorch-lightning
+transformers>=4.26.0
+datasets>=2.9.0
+pytorch-lightning>=1.9.0
 scikit-learn
 pandas
 wandb
@@ -9,6 +9,7 @@ typer
 loguru
 bitsandbytes; platform_system=='Linux'
 pytorch_optimizer
+pyyaml
 
 black
 isort

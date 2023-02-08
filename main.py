@@ -20,7 +20,9 @@ from app.module import TextMLMModule
 cmd = Typer(pretty_exceptions_show_locals=False)
 
 
-def config_callback(ctx: typer.Context, param: typer.CallbackParam, value: Optional[str] = None):
+def config_callback(
+    ctx: typer.Context, param: typer.CallbackParam, value: Optional[str] = None
+):
     if value:
         typer.echo(f"load config: {value}")
         try:

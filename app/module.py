@@ -9,14 +9,14 @@ from torchmetrics import Accuracy
 from .util import create_optimizer
 
 if TYPE_CHECKING:
-    from transformers import PreTrainedModel, PreTrainedTokenizerFast
+    from transformers import PreTrainedModel, PreTrainedTokenizerBase
 
 
 class TextMLMModule(pl.LightningModule):
     def __init__(
         self,
         model: "PreTrainedModel",
-        tokenizer: "PreTrainedTokenizerFast",
+        tokenizer: "PreTrainedTokenizerBase",
         optimizer: str = "adamw",
         learning_rate: float = 1e-4,
         weight_decay: float = 1e-4,
@@ -69,14 +69,15 @@ class TextMLMModule(pl.LightningModule):
         opt_class = create_optimizer(self.optimizer)
         signiture = inspect.signature(opt_class)
         opt_kwargs = {}
-        if "capturable" in signiture.parameters:
-            opt_kwargs["capturable"] = True
-        if "weight_decouple" in signiture.parameters:
-            opt_kwargs["weight_decouple"] = True
-        if "decouple_decay" in signiture.parameters:
-            opt_kwargs["decouple_decay"] = True
-        if "decoupled_weight_decay" in signiture.parameters:
-            opt_kwargs["decoupled_weight_decay"] = True
+        true_kwargs = [
+            "capturable",
+            "weight_decouple",
+            "decouple_decay",
+            "decoupled_weight_decay",
+        ]
+        for key in true_kwargs:
+            if key in signiture.parameters:
+                opt_kwargs[key] = True
 
         optimizer = opt_class(
             optimizer_grouped_parameters,
@@ -89,7 +90,9 @@ class TextMLMModule(pl.LightningModule):
 
             manager = GlobalOptimManager.get_instance()
             for name, module in self.model.named_modules():
-                if isinstance(module, torch.nn.Embedding) or name.endswith("decoder"):
+                if isinstance(module, torch.nn.Embedding) or name.endswith(
+                    ("decoder", "lm_head")
+                ):
                     manager.register_module_override(
                         module, "weight", {"optim_bits": 32}
                     )
