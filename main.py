@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import Optional
 
 import pytorch_lightning as pl
+import typer
+import yaml
 from loguru import logger
 from pytorch_lightning.callbacks import (
     LearningRateMonitor,
@@ -18,13 +20,30 @@ from app.module import TextMLMModule
 cmd = Typer(pretty_exceptions_show_locals=False)
 
 
+def config_callback(ctx: typer.Context, param: typer.CallbackParam, value: Optional[str] = None):
+    if value:
+        typer.echo(f"load config: {value}")
+        try:
+            with open(value, encoding="utf-8") as f:
+                cfg = yaml.full_load(f)
+            if ctx.default_map is None:
+                ctx.default_map = {}
+            ctx.default_map.update(cfg)
+        except Exception as e:
+            raise typer.BadParameter(f"load config error: {e}") from e
+    return value
+
+
 @cmd.command(no_args_is_help=True)
 def train(
     model_name: str = Argument(
         ..., help="huggingface model name", show_default=False, rich_help_panel="model"
     ),
+    config: Optional[str] = Option(
+        None, help="config yaml file", callback=config_callback, is_eager=True
+    ),
     optimizer: str = Option("adamw", help="optimizer name", rich_help_panel="model"),
-    learning_rate: float = Option(5e-4, help="learning rate", rich_help_panel="model"),
+    learning_rate: float = Option(1e-4, help="learning rate", rich_help_panel="model"),
     weight_decay: float = Option(1e-4, help="weight decay", rich_help_panel="model"),
     batch_size: int = Option(32, min=1, help="batch size", rich_help_panel="data"),
     num_workers: int = Option(

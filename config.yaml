@@ -1,0 +1,17 @@
+model_name:
+optimizer: adamw
+learning_rate: !!float 1e-4
+weight_decay: !!float 1e-4
+batch_size: 32
+num_workers: 0
+accumulate_grad_batches:
+gradient_clip_val:
+auto_scale_batch_size: false
+max_epochs: 3
+steps_per_epoch:
+wandb_name:
+seed:
+fast_dev_run: false
+save_path: "save/my_model"
+log_every_n_steps: 100
+resume_from_checkpoint:
