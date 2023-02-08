@@ -44,6 +44,12 @@ def train(
     model_type: str = Option(
         "mlm", help="model type, ['mlm', 'clm']", rich_help_panel="model"
     ),
+    data_path: str = Option(
+        "data", help="path of preprocessed dataset", rich_help_panel="data"
+    ),
+    seq_length: int = Option(
+        512, help="dataset max sequence length", rich_help_panel="data"
+    ),
     config: Optional[str] = Option(
         None, help="config yaml file", callback=config_callback, is_eager=True
     ),
@@ -99,7 +105,12 @@ def train(
 
     logger.debug("loading datamodule")
     datamodule = TextDataModule(
-        tokenizer=tokenizer, batch_size=batch_size, num_workers=num_workers
+        tokenizer=tokenizer,
+        model_type=model_type,
+        data_path=data_path,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        seq_length=seq_length,
     )
 
     logger.debug("loading lightning module")

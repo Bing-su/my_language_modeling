@@ -4,6 +4,8 @@ optimizer: adamw
 learning_rate: !!float 1e-4
 weight_decay: !!float 1e-4
 batch_size: 32
+data_path: data
+seq_length: 512
 num_workers: 0
 accumulate_grad_batches:
 gradient_clip_val:
