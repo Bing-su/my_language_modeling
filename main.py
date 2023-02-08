@@ -1,7 +1,8 @@
 from datetime import datetime
-from typing import Optional, Union
+from typing import Optional
 
 import pytorch_lightning as pl
+import torch
 import typer
 import yaml
 from loguru import logger
@@ -18,6 +19,7 @@ from app.dataset import TextDataModule
 from app.module import TextMLMModule
 
 cmd = Typer(pretty_exceptions_show_locals=False)
+torch.set_float32_matmul_precision("high")
 
 
 def config_callback(
