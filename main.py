@@ -143,9 +143,7 @@ def train(
 
     callbacks = [checkpoints, RichProgressBar(), LearningRateMonitor()]
 
-    if seed is not None:
-        pl.seed_everything(seed)
-        logger.info(f"set seed: {seed}")
+    pl.seed_everything(seed)
 
     limit_train_batches = steps_per_epoch if steps_per_epoch else 1.0
     if isinstance(limit_train_batches, int) and accumulate_grad_batches is not None:
