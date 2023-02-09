@@ -117,6 +117,6 @@ class TextMLMModule(pl.LightningModule):
         if self.model_type == "mlm":
             self.acc(preds, labels)
         else:  # "clm"
-            preds = preds[:, 1:]
-            labels = labels[:, :-1]
+            preds = preds[:, :-1]
+            labels = labels[:, 1:]
             self.acc(preds, labels)
