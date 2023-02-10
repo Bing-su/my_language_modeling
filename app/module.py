@@ -37,9 +37,8 @@ class TextMLMModule(pl.LightningModule):
             task="multiclass", num_classes=model.config.vocab_size, ignore_index=-100
         )
 
-    @property
-    def forward(self):
-        return self.model.forward
+    def forward(self, *args, **kwargs):
+        return self.model.forward(*args, **kwargs)
 
     def training_step(self, batch, batch_idx):
         output = self.model(**batch)
