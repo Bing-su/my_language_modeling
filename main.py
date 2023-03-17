@@ -68,16 +68,11 @@ def train(
     num_workers: int = Option(
         0, min=0, help="num workers for dataloader", rich_help_panel="train"
     ),
-    accumulate_grad_batches: Optional[int] = Option(
-        None, min=1, help="accumulate grad batches", rich_help_panel="train"
+    accumulate_grad_batches: int = Option(
+        1, min=1, help="accumulate grad batches", rich_help_panel="train"
     ),
     gradient_clip_val: Optional[float] = Option(
         None, min=0.0, help="gradient clip value", rich_help_panel="train"
-    ),
-    auto_scale_batch_size: bool = Option(
-        False,
-        help="auto find batch size, ignore batch_size option",
-        rich_help_panel="train",
     ),
     max_epochs: int = Option(3, help="max epochs", rich_help_panel="train"),
     steps_per_epoch: Optional[int] = Option(
@@ -167,13 +162,8 @@ def train(
         max_epochs=max_epochs,
         limit_train_batches=limit_train_batches,
         callbacks=callbacks,
-        auto_scale_batch_size=auto_scale_batch_size,
         log_every_n_steps=log_every_n_steps,
     )
-
-    if auto_scale_batch_size:
-        logger.debug("auto scale batch size")
-        trainer.tune(module, datamodule=datamodule)
 
     logger.debug("start training")
     trainer.fit(module, datamodule=datamodule, ckpt_path=resume_from_checkpoint)

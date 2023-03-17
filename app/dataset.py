@@ -1,9 +1,9 @@
-import shutil
 from itertools import chain
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
 import pytorch_lightning as pl
+import torch
 from datasets import Dataset, load_dataset, load_from_disk
 from loguru import logger
 from torch.utils.data import DataLoader
@@ -70,7 +70,7 @@ class TextDataModule(pl.LightningDataModule):
         self.data_path = data_path
         self.seq_length = seq_length
         self.collator = DataCollatorForLanguageModeling(
-            tokenizer, mlm=model_type == "mlm"
+            tokenizer, mlm=model_type == "mlm", mlm_probability=0.4
         )
 
     def prepare_data(self) -> None:
@@ -107,6 +107,6 @@ class TextDataModule(pl.LightningDataModule):
             collate_fn=self.collator,
             shuffle=True,
             num_workers=self.num_workers,
-            persistent_workers=True,
-            pin_memory=True,
+            persistent_workers=self.num_workers > 0,
+            pin_memory=torch.cuda.is_available(),
         )

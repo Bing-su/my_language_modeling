@@ -46,7 +46,7 @@ class TextMLMModule(pl.LightningModule):
 
         self.calc_accuracy(output.logits, batch["labels"])
 
-        self.log("train_loss", loss, on_step=True, on_epoch=True)
+        self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log("train_acc", self.acc, on_step=True, on_epoch=True)
         return loss
 
