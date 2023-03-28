@@ -93,6 +93,7 @@ def train(
     wandb_name: Optional[str] = Option(
         None, help="wandb project name", rich_help_panel="train"
     ),
+    project: str = Option("mlm", help="wandb project name", rich_help_panel="train"),
     seed: Optional[int] = Option(None, help="seed", rich_help_panel="train"),
 ):
     model_type = model_type.lower()
@@ -152,11 +153,11 @@ def train(
 
     logger.debug("set trainer")
     trainer = pl.Trainer(
-        logger=WandbLogger(name=wandb_name, project="mlm"),
+        logger=WandbLogger(name=wandb_name, project=project),
         fast_dev_run=fast_dev_run,
         enable_progress_bar=True,
         accelerator="auto",
-        precision=16 if "bnb" not in optimizer else 32,
+        precision="16-mixed" if "bnb" not in optimizer else "32-true",
         accumulate_grad_batches=accumulate_grad_batches,
         gradient_clip_val=gradient_clip_val,
         max_epochs=max_epochs,

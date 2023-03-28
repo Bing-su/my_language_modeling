@@ -26,6 +26,7 @@ dependencies:
   - isort
   - flake8
   - flake8-bugbear
+  - ruff
   - mypy
   - ipywidgets
   - pre-commit
@@ -33,4 +34,3 @@ dependencies:
   - pip:
       - bitsandbytes; platform_system=='Linux'
       - pytorch_optimizer
-      - ruff

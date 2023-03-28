@@ -8,12 +8,12 @@ batch_size: 32
 data_path: data
 seq_length: 512
 num_workers: 0
-accumulate_grad_batches:
+accumulate_grad_batches: 1
 gradient_clip_val:
-auto_scale_batch_size: false
 max_epochs: 3
 steps_per_epoch:
 wandb_name:
+project: mlm
 seed:
 fast_dev_run: 0
 save_path: "save/my_model"
