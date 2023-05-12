@@ -19,7 +19,7 @@ def create_optimizer(name: str):
         return AdamW
     elif name == "sgd":
         return SGD
-    elif name in ("adam_bnb", "adamw_bnb"):
+    elif name.endswith("bnb"):
         if not torch.cuda.is_available():
             raise RuntimeError("CUDA is required for BNB optimizers")
 
@@ -27,14 +27,20 @@ def create_optimizer(name: str):
             os.environ["LD_LIBRARY_PATH"] = "/usr/lib/wsl/lib"
 
         try:
-            from bitsandbytes.optim import Adam8bit, AdamW8bit
-
-            if name == "adam_bnb":
-                return Adam8bit
-            else:
-                return AdamW8bit
-
+            import bitsandbytes.optim as optim
         except ImportError as e:
             raise ImportError("install bitsandbytes first") from e
+
+        m = {
+            "adagrad_bnb": optim.Adagrad8bit,
+            "adam_bnb": optim.Adam8bit,
+            "adamw_bnb": optim.AdamW8bit,
+            "lamb_bnb": optim.LAMB8bit,
+            "lars_bnb": optim.LARS8bit,
+            "rmsprop_bnb": optim.RMSprop8bit,
+            "lion_bnb": optim.Lion8bit,
+            "sgd_bnb": optim.SGD8bit,
+        }
+        return m[name]
     else:
         return load_optimizer(name)
