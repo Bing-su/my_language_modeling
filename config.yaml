@@ -7,15 +7,16 @@ weight_decay: !!float 1e-4
 batch_size: 32
 data_path: data
 seq_length: 512
-num_workers: 0
+num_workers: 8
 accumulate_grad_batches: 1
-gradient_clip_val:
-max_epochs: 3
-steps_per_epoch:
+gradient_clip_val: 1.0
+max_epochs: 150
+steps_per_epoch: 10000
+precision: 16-mixed
 wandb_name:
 project: mlm
 seed:
 fast_dev_run: 0
 save_path: "save/my_model"
-log_every_n_steps: 100
+log_every_n_steps: 200
 resume_from_checkpoint:

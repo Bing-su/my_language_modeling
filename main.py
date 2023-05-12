@@ -78,6 +78,7 @@ def train(
     steps_per_epoch: Optional[int] = Option(
         None, min=1, help="steps per epoch", rich_help_panel="train"
     ),
+    precision: str = Option("16-mixed", help="precision", rich_help_panel="train"),
     fast_dev_run: int = Option(0, help="do test run", rich_help_panel="train"),
     save_path: str = Option(
         "save/my_model", help="save path of trained model", rich_help_panel="train"
@@ -157,7 +158,7 @@ def train(
         fast_dev_run=fast_dev_run,
         enable_progress_bar=True,
         accelerator="auto",
-        precision="16-mixed" if "bnb" not in optimizer else "32-true",
+        precision=precision,
         accumulate_grad_batches=accumulate_grad_batches,
         gradient_clip_val=gradient_clip_val,
         max_epochs=max_epochs,
