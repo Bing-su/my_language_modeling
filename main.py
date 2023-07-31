@@ -1,17 +1,17 @@
 from datetime import datetime
 from typing import Optional
 
-import pytorch_lightning as pl
+import lightning as L
 import torch
 import typer
 import yaml
 from loguru import logger
-from pytorch_lightning.callbacks import (
+from lightning.pytorch.callbacks import (
     LearningRateMonitor,
     ModelCheckpoint,
     RichProgressBar,
 )
-from pytorch_lightning.loggers import WandbLogger
+from lightning.pytorch.loggers import WandbLogger
 from transformers import AutoModelForCausalLM, AutoModelForMaskedLM, AutoTokenizer
 from typer import Argument, Option, Typer
 
@@ -19,7 +19,7 @@ from app.dataset import TextDataModule
 from app.module import TextMLMModule
 
 cmd = Typer(pretty_exceptions_show_locals=False)
-torch.set_float32_matmul_precision("high")
+torch.set_float32_matmul_precision("medium")
 
 
 def config_callback(
@@ -140,7 +140,7 @@ def train(
 
     callbacks = [checkpoints, RichProgressBar(), LearningRateMonitor()]
 
-    pl.seed_everything(seed)
+    L.seed_everything(seed)
 
     limit_train_batches = steps_per_epoch if steps_per_epoch else 1.0
     if isinstance(limit_train_batches, int) and accumulate_grad_batches is not None:
@@ -153,7 +153,7 @@ def train(
     logger.info(f"wandb name: {wandb_name}")
 
     logger.debug("set trainer")
-    trainer = pl.Trainer(
+    trainer = L.Trainer(
         logger=WandbLogger(name=wandb_name, project=project),
         fast_dev_run=fast_dev_run,
         enable_progress_bar=True,

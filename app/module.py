@@ -1,7 +1,7 @@
 import inspect
 from typing import TYPE_CHECKING
 
-import pytorch_lightning as pl
+import lightning as L
 import torch
 from loguru import logger
 from torchmetrics import Accuracy
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from transformers import PreTrainedModel, PreTrainedTokenizerBase
 
 
-class TextMLMModule(pl.LightningModule):
+class TextMLMModule(L.LightningModule):
     def __init__(
         self,
         model: "PreTrainedModel",

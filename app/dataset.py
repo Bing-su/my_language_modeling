@@ -2,7 +2,7 @@ from itertools import chain
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
-import pytorch_lightning as pl
+import lightning as L
 import torch
 from datasets import Dataset, load_dataset, load_from_disk
 from loguru import logger
@@ -52,7 +52,7 @@ class GroupText:
         return result
 
 
-class TextDataModule(pl.LightningDataModule):
+class TextDataModule(L.LightningDataModule):
     def __init__(
         self,
         tokenizer: "PreTrainedTokenizerBase",
