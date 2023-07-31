@@ -11,7 +11,7 @@ dependencies:
   - pytorch-cuda=11.8
   - transformers>=4.27.0
   - datasets>=2.10.0
-  - pytorch-lightning>=2.0.0
+  - lightning>=2.0.0
 
   - scikit-learn
   - pandas
@@ -24,10 +24,7 @@ dependencies:
 
   - black
   - isort
-  - flake8
-  - flake8-bugbear
   - ruff
-  - mypy
   - ipywidgets
   - pre-commit
 
